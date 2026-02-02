@@ -5,23 +5,23 @@ description: Develop and deploy code for WordPress VIP environments following pl
 
 # WordPress VIP Development
 
-This skill guides development for WordPress VIP (WPVIP) platform, covering coding standards, deployment, performance, security, and platform-specific requirements.
+You are a **WordPress VIP** developer working on enterprise WordPress applications. You follow strict platform requirements for coding standards, deployment, performance, security, and architecture.
 
 ## Quick Reference
 
-WordPress VIP is an enterprise WordPress hosting platform with strict requirements:
+**WordPress VIP** is an enterprise hosting platform with specific requirements you must follow:
 
 - **Prohibited**: file system writes, uncached external requests, certain plugins/functions
 - **Required**: code review, automated scanning, performance optimization
-- **Deployment**: via GitHub integration or VIP-CLI
+- **Deployment**: via **GitHub** integration or **VIP-CLI**
 - **Local Dev**: VIP Local Dev Environment or Docker
-- **Search**: Enterprise Search powered by Elasticsearch via ElasticPress
+- **Search**: Enterprise Search powered by **Elasticsearch** via **ElasticPress**
 
 ## Coding Standards
 
 ### File System Restrictions
 
-WordPress VIP uses a read-only file system in production.
+You work with a read-only file system in production. The platform blocks direct file writes to ensure security and scalability.
 
 **Prohibited operations:**
 - Direct file writes (`file_put_contents()`, `fwrite()`)
@@ -29,15 +29,15 @@ WordPress VIP uses a read-only file system in production.
 - Cache writes to files
 - Log writes to files
 
-**VIP-approved alternatives:**
-- Use `wpcom_vip_download_image()` for remote images
-- Store uploads in VIP's object storage
-- Use persistent object cache (Memcached)
-- Use `error_log()` for logging (auto-streamed to logs)
+**You must use these VIP-approved alternatives:**
+- `wpcom_vip_download_image()` for remote images
+- VIP's **object storage** for uploads
+- **Persistent object cache** (**Memcached**) for caching
+- `error_log()` for logging (auto-streamed to logs)
 
 ### Restricted Functions
 
-Functions that are blocked or discouraged:
+You must avoid functions that are blocked or discouraged by the platform:
 
 ```php
 // Prohibited - direct database queries
@@ -60,7 +60,7 @@ if (false === $response) {
 
 ### Required Prefixes
 
-All custom functions, classes, and constants must be prefixed:
+You must prefix all custom functions, classes, and constants to avoid conflicts:
 
 ```php
 // Good - prefixed
@@ -75,7 +75,7 @@ class Custom_Class {}
 
 ### Database Queries
 
-Follow WordPress VIP query patterns:
+You must follow **WordPress VIP** query patterns for security and performance:
 
 ```php
 // Bad - direct query without prepare
@@ -100,9 +100,9 @@ $results = $wpdb->get_results(
 
 ### Prohibited Plugins
 
-Never allowed: caching plugins (VIP provides caching), security plugins that modify .htaccess, backup plugins (VIP handles backups), or plugins that write to filesystem.
+You cannot use caching plugins (**VIP** provides caching), security plugins that modify `.htaccess`, backup plugins (**VIP** handles backups), or plugins that write to filesystem.
 
-Before using any plugin, verify: no file system writes, no uncached external requests, no restricted functions, performance tested, security reviewed.
+Before using any plugin, you must verify it meets these criteria: no file system writes, no uncached external requests, no restricted functions, performance tested, and security reviewed.
 
 ## Performance Requirements
 
@@ -140,7 +140,7 @@ function clientname_get_expensive_data($id) {
 
 ### Page Cache Compatibility
 
-Ensure code works with full-page caching:
+You must ensure your code works with full-page caching:
 
 ```php
 // Bad - will show same content to all users
@@ -153,7 +153,7 @@ echo '<span class="user-name" data-user-id="' . get_current_user_id() . '"></spa
 
 ### External Requests
 
-Always cache external API calls:
+You must always cache external API calls to prevent performance issues:
 
 ```php
 function clientname_fetch_api_data($endpoint) {
@@ -185,7 +185,7 @@ function clientname_fetch_api_data($endpoint) {
 
 ### Input Validation
 
-Always validate and sanitize:
+You must always validate and sanitize user input:
 
 ```php
 // User input
@@ -201,7 +201,7 @@ echo esc_attr($attribute);
 
 ### Nonce Verification
 
-Protect forms and AJAX:
+You must protect forms and AJAX requests with nonces:
 
 ```php
 // Form with nonce
@@ -216,7 +216,7 @@ if (!isset($_POST['clientname_nonce']) ||
 
 ### SQL Injection Prevention
 
-Always use `$wpdb->prepare()`:
+You must always use `$wpdb->prepare()` for database queries:
 
 ```php
 // Correct
@@ -228,9 +228,9 @@ $results = $wpdb->get_results($wpdb->prepare(
 
 ## Local Development
 
-Use VIP Local Dev Environment
+You should use the **VIP Local Dev Environment** for local development.
 
-**VIP Local Dev Environment:**
+**Setup VIP Local Dev Environment:**
 ```bash
 npm install -g @automattic/vip
 vip dev-env create --slug=mysite
@@ -249,24 +249,24 @@ See [VIP Local Development documentation](https://docs.wpvip.com/local-developme
 
 ### Using GitHub Integration
 
-VIP deploys automatically from GitHub branches:
+You deploy code automatically using **GitHub** branches. **VIP** monitors your repository and deploys changes automatically.
 
-1. **Development**: `develop` branch → deployed to `develop` environment
-2. **Staging**: `master`/`main` branch → deployed to `production` environment
-3. **Production**: Manual promotion via VIP Dashboard
+1. **Development**: Push to `develop` branch → deploys to `develop` environment
+2. **Staging**: Push to `master`/`main` branch → deploys to staging
+3. **Production**: Manually promote via **VIP Dashboard**
 
-**Commit and push:**
+**Commit and push your changes:**
 ```bash
 git add .
 git commit -m "feat: add custom post type"
 git push origin develop
 ```
 
-Monitor deployment in VIP Dashboard.
+You can monitor deployment progress in the **VIP Dashboard**.
 
 ### Using VIP-CLI
 
-**Deploy code:**
+You can also deploy using **VIP-CLI**:
 ```bash
 # Deploy to environment
 vip @mysite.develop deploy
@@ -286,26 +286,30 @@ vip @mysite.production wp post list --post_type=page
 
 ### Pre-Deployment Checklist
 
-Before deploying, verify:
+You must verify these items before deploying:
 
-- [ ] Code passes `phpcs` with WordPress VIP ruleset
+- [ ] Code passes **PHPCS** with WordPress VIP ruleset
 - [ ] No restricted functions used
 - [ ] All external requests are cached
 - [ ] Database queries are optimized
 - [ ] User inputs are sanitized
 - [ ] Outputs are escaped
 - [ ] No file system writes
-- [ ] Tested in local VIP environment
+- [ ] Tested in local **VIP** environment
 - [ ] No `var_dump()` or debugging code
 - [ ] Error logging uses `error_log()` only
 
 ## Code Review Process
 
-VIP runs automated scans (`vip-go-ci`) on every commit, checking for restricted functions, direct database queries, uncached external requests, and security issues. All code requires review before production. Submit PRs with clear descriptions, address automated findings, and merge after approval.
+You must pass automated code review before deploying to production.
+
+**VIP** runs automated scans (`vip-go-ci`) on every commit. These scans check for restricted functions, direct database queries, uncached external requests, and security issues.
+
+You should submit pull requests with clear descriptions, address automated findings, and wait for approval before merging.
 
 ## Code Scanning
 
-Use PHPCS with WordPress VIP Coding Standards:
+You should run **PHPCS** with **WordPress VIP Coding Standards** locally before committing:
 
 ```bash
 composer require --dev automattic/vipwpcs
@@ -378,24 +382,25 @@ add_action('clientname_daily_task', 'clientname_run_daily_task');
 
 ## Enterprise Search
 
-WordPress VIP includes Enterprise Search powered by Elasticsearch via the ElasticPress plugin. Enterprise Search provides fast, scalable search with features like weighted search, faceted filtering, fuzzy matching, related posts, and autosuggest. Once enabled in the VIP Dashboard, ElasticPress automatically handles WordPress search queries. For complete documentation on indexing, configuration, advanced features, and performance optimization, see [references/ENTERPRISE_SEARCH.md](references/ENTERPRISE_SEARCH.md)
+You have access to **Enterprise Search** powered by **Elasticsearch** via the **ElasticPress** plugin.
+
+**Enterprise Search** provides fast, scalable search with features like weighted search, faceted filtering, fuzzy matching, related posts, and autosuggest. Once you enable it in the **VIP Dashboard**, **ElasticPress** automatically handles WordPress search queries.
+
+For complete documentation on indexing, configuration, advanced features, and performance optimization, see [references/ENTERPRISE_SEARCH.md](references/ENTERPRISE_SEARCH.md)
 
 ## Troubleshooting
 
 ### Common Issues
 
 **White screen/500 error:**
-- Check PHP error logs: `vip @mysite.env logs php`
-- Verify no fatal errors in recent code
-- Check for memory limit issues
+You should check PHP error logs first: `vip @mysite.env logs php`. Verify no fatal errors in recent code and check for memory limit issues.
 
 **Performance degradation:**
-- Review New Relic in VIP Dashboard
-- Check for N+1 queries
-- Verify object caching is working
-- Look for uncached external requests
+You should review **New Relic** in the **VIP Dashboard**. Check for N+1 queries, verify **object caching** is working, and look for uncached external requests.
 
 **Cache not clearing:**
+You can manually clear caches using these commands:
+
 ```bash
 # Clear all caches
 vip @mysite.production wp cache flush
@@ -405,23 +410,25 @@ vip @mysite.production wp vip-go purge-url "https://example.com/page"
 ```
 
 **Plugin conflicts:**
-- Deactivate recent plugins
-- Test in local environment
-- Check plugin compatibility with VIP
+You should deactivate recent plugins, test in your local environment, and verify plugin compatibility with **VIP** requirements.
 
 ## Additional Resources
 
-- For complete WordPress VIP function reference, see [references/VIP_FUNCTIONS.md](references/VIP_FUNCTIONS.md)
-- For deployment examples and workflows, see [references/DEPLOYMENT_EXAMPLES.md](references/DEPLOYMENT_EXAMPLES.md)
-- For performance optimization patterns, see [references/PERFORMANCE.md](references/PERFORMANCE.md)
-- For Enterprise Search details and advanced patterns, see [references/ENTERPRISE_SEARCH.md](references/ENTERPRISE_SEARCH.md)
+You can find more detailed information in these reference documents:
+
+- Complete **WordPress VIP** function reference: [references/VIP_FUNCTIONS.md](references/VIP_FUNCTIONS.md)
+- Deployment examples and workflows: [references/DEPLOYMENT_EXAMPLES.md](references/DEPLOYMENT_EXAMPLES.md)
+- Performance optimization patterns: [references/PERFORMANCE.md](references/PERFORMANCE.md)
+- **Enterprise Search** details and advanced patterns: [references/ENTERPRISE_SEARCH.md](references/ENTERPRISE_SEARCH.md)
 
 ## Key Reminders
 
-1. **No file system writes** - use object cache or VIP's storage
-2. **Cache external requests** - always use transients or object cache
+You must follow these critical requirements:
+
+1. **No file system writes** - use **object cache** or **VIP's** storage
+2. **Cache external requests** - always use transients or **object cache**
 3. **Prefix everything** - functions, classes, constants
 4. **Prepare queries** - always use `$wpdb->prepare()`
-5. **Test locally** - use VIP Local Dev Environment
+5. **Test locally** - use **VIP Local Dev Environment**
 6. **Monitor scans** - address automated findings before review
-7. **Follow standards** - WordPress VIP Coding Standards (PHPCS)
+7. **Follow standards** - **WordPress VIP Coding Standards** (**PHPCS**)
