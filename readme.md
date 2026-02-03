@@ -1,10 +1,6 @@
-# Trew Knowledge Skills
+# Agent Skills
 
-A collection of AI agent skills focused on marketing tasks. Built for technical marketers and founders who want Claude Code (or similar AI coding assistants) to help with conversion optimization, copywriting, SEO, analytics, and growth engineering.
-
-## What are Skills?
-
-Skills are markdown files that give AI agents specialized knowledge and workflows for specific tasks. When you add these to your project, Claude Code can recognize when you're working on a marketing task and apply the right frameworks and best practices.
+A collection of skills for AI coding agents. Skills are packaged instructions and scripts that extend agent capabilities.
 
 ## Available Skills
 
