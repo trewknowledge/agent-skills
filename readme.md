@@ -8,6 +8,7 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 | Skill | Description |
 |-------|-------------|
 | [wordpress-vip](skills/wordpress-vip/) | When the user is working a WordPress VIP project |
+| [project-documentation](skills/project-documentat/) | When the user wants to document a feature for non-developers and AI Agents |
 <!-- SKILLS:END -->
 
 ## Installation
