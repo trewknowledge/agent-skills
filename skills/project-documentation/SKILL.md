@@ -22,6 +22,8 @@ Write in plain language that non-developers can understand, but include details 
 
 Create a `docs/README.md` that serves as both a feature inventory and navigation index. List features only after they've been documented.
 
+**Good Example for formatting purposes**
+
 ```markdown
 # Project Documentation
 
