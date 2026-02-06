@@ -8,6 +8,7 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 | Skill | Description |
 |-------|-------------|
 | [wordpress-vip](skills/wordpress-vip/) | When the user is working a WordPress VIP project |
+| [project-documentation](skills/project-documentat/) | When the user wants to document a feature for non-developers and AI Agents |
 <!-- SKILLS:END -->
 
 ## Installation
@@ -39,7 +40,7 @@ cp -r agent-skills/skills/* .claude/skills/
 ```
 ## Usage
 
-Once installed, it should use the skills when they are relevant. You may want to provide context directly at the beginning such as if you are working on a WP VIP project or not.
+Once installed, it should use the skills when they are relevant. You may want to provide context directly when you engage a new agent, such as whether you are working on a WordPress VIP project.
 
 You can also invoke skills directly:
 
