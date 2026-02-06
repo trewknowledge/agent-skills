@@ -73,6 +73,22 @@ docs/
 └── dashboard-analytics.md
 ```
 
+## What Qualifies as a "Feature"?
+
+A feature represents any significant user-facing behavior or system capability, including:
+
+- **User-facing functionality** - Actions users can perform (login, submit forms, view reports)
+- **Admin workflows** - Backend processes for managing the system (user management, content moderation)
+- **Business rules and conditional logic** - Rules that govern behavior (approval workflows, eligibility checks)
+- **Permissions and role-based behavior** - What different user types can/cannot do
+- **Integrations with third-party services** - External APIs, payment gateways, email services
+- **Background processing** - Cron jobs, scheduled tasks, queued operations
+- **Automation** - Automatic actions triggered by events (auto-notifications, data sync)
+- **Custom data flows** - How information moves through the system
+- **Lifecycle behavior** - State transitions and what triggers them
+
+If it affects user experience or system behavior, it's worth documenting.
+
 ## Feature Documentation Template
 
 Use this structure for each feature:
@@ -177,6 +193,31 @@ Use this structure for each feature:
 - **Clarify business rules** - constraints that must ALWAYS be enforced
 - **Note feature boundaries** - where one feature ends and another begins
 - **Explain non-obvious logic** - anything that might seem like a bug but is intentional
+- **Describe implicit behavior** - automatic assignments, default values, hidden triggers
+- **Document configuration-dependent behavior** - what changes based on settings or user attributes
+
+## When Code Isn't Enough
+
+Some features have behavior that isn't obvious from reading code alone:
+
+- **Historical context** - Why certain decisions were made
+- **Business rules** - Logic based on stakeholder requirements
+- **Implicit assumptions** - Default behaviors not explicitly coded
+- **Edge case handling** - Decisions about unusual scenarios
+- **Configuration-driven behavior** - Different behavior in different contexts
+
+**When you encounter unclear behavior while documenting:**
+
+1. **Note what's unclear** - Document the question you need answered
+2. **Ask the user/SME** - Request clarification from someone who knows the business context
+3. **Document the answer** - Add the clarified behavior to the documentation
+4. **Be explicit** - Make the implicit behavior explicit in the docs
+
+Example questions to ask SMEs:
+- "When a user has multiple roles, which permissions take precedence?"
+- "What should happen when the external API is down during checkout?"
+- "Why do we auto-assign users to Team A instead of Team B?"
+- "What's the business reason for the 30-day limit on refunds?"
 
 ## Example Documentation
 
