@@ -40,7 +40,7 @@ cp -r agent-skills/skills/* .claude/skills/
 ```
 ## Usage
 
-Once installed, it should use the skills when they are relevant. You may want to provide context directly at the beginning such as if you are working on a WP VIP project or not.
+Once installed, it should use the skills when they are relevant. You may want to provide context directly when you engage a new agent, such as whether you are working on a WordPress VIP project.
 
 You can also invoke skills directly:
 
