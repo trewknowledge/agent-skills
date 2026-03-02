@@ -48,6 +48,12 @@ You can also invoke skills directly:
 /wordpress-vip
 ```
 
+## How to Create a new Skill
+This repository's AGENTS.md file contains instructions on creating a new skill so that an agent follows the same type of language and structure.
+
+*Cursor:* Cursor has a /create-skill command available. It will create it under a .cursor folder. You then move it to the skills folder we already have.
+*Claude Code:* There's a skill by Anthropic called [Skill Creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) included in this repository. Move it to the main skills folder when done.
+
 ## Contributing
 
 Found a way to improve a skill? Have a new skill to suggest? PRs and issues welcome!
