@@ -78,19 +78,20 @@ class Custom_Class {}
 You must follow **WordPress VIP** query patterns for security and performance:
 
 ```php
-// Bad - direct query without prepare
+// Bad - direct query without prepare, selecting all columns
 $results = $wpdb->get_results("SELECT * FROM $wpdb->posts WHERE post_status = 'publish'");
 
 // Good - use WP_Query
 $query = new WP_Query([
-    'post_status' => 'publish',
+    'post_status'    => 'publish',
     'posts_per_page' => 100,
+    'no_found_rows'  => true,
 ]);
 
-// If direct query needed - use prepare
+// If direct query needed - use prepare and select only needed columns
 $results = $wpdb->get_results(
     $wpdb->prepare(
-        "SELECT * FROM $wpdb->posts WHERE post_status = %s",
+        "SELECT ID, post_title FROM $wpdb->posts WHERE post_status = %s",
         'publish'
     )
 );
@@ -115,10 +116,31 @@ foreach ($post_ids as $post_id) {
     $post = get_post($post_id); // N queries
 }
 
-// Good - batch query
+// Good - batch query with hard limit (never use -1; VIP prohibits unbounded queries)
 $posts = get_posts([
-    'post__in' => $post_ids,
-    'posts_per_page' => -1,
+    'post__in'       => $post_ids,
+    'posts_per_page' => 100,
+    'no_found_rows'  => true,
+]);
+```
+
+**Fetch only what you need:**
+```php
+// Only IDs needed - avoid fetching full post objects
+$post_ids = get_posts([
+    'post_status'    => 'publish',
+    'posts_per_page' => 100,
+    'fields'         => 'ids',
+    'no_found_rows'  => true,
+]);
+
+// Not using post meta or terms - skip priming those caches
+$query = new WP_Query([
+    'post_status'              => 'publish',
+    'posts_per_page'           => 50,
+    'no_found_rows'            => true,
+    'update_post_meta_cache'   => false,
+    'update_post_term_cache'   => false,
 ]);
 ```
 
@@ -157,16 +179,17 @@ You must always cache external API calls to prevent performance issues:
 
 ```php
 function clientname_fetch_api_data($endpoint) {
-    $cache_key = md5('api_' . $endpoint);
-    $data = wp_cache_get($cache_key, 'api');
+    // Use a readable, prefixed key - md5 hashes are hard to debug in production
+    $cache_key = 'clientname_api_' . sanitize_key($endpoint);
+    $data = wp_cache_get($cache_key, 'clientname_api');
     
     if (false === $data) {
         $response = vip_safe_wp_remote_get(
             $endpoint,
-            '',
-            3,
-            3,
-            20
+            '',  // fallback value on failure
+            3,   // failure threshold before returning fallback
+            3,   // timeout in seconds
+            20   // retry-after in seconds
         );
         
         if (is_wp_error($response)) {
@@ -174,7 +197,7 @@ function clientname_fetch_api_data($endpoint) {
         }
         
         $data = json_decode(wp_remote_retrieve_body($response), true);
-        wp_cache_set($cache_key, $data, 'api', 15 * MINUTE_IN_SECONDS);
+        wp_cache_set($cache_key, $data, 'clientname_api', 15 * MINUTE_IN_SECONDS);
     }
     
     return $data;
@@ -219,9 +242,9 @@ if (!isset($_POST['clientname_nonce']) ||
 You must always use `$wpdb->prepare()` for database queries:
 
 ```php
-// Correct
+// Correct - use prepare() and select only needed columns
 $results = $wpdb->get_results($wpdb->prepare(
-    "SELECT * FROM $wpdb->posts WHERE post_title LIKE %s",
+    "SELECT ID, post_title FROM $wpdb->posts WHERE post_title LIKE %s",
     '%' . $wpdb->esc_like($search) . '%'
 ));
 ```
@@ -340,11 +363,12 @@ add_action('init', 'clientname_register_cpt');
 
 ```php
 function clientname_register_api_routes() {
+    // Public endpoint - __return_true is only appropriate for truly public data
     register_rest_route('clientname/v1', '/data/(?P<id>\d+)', [
-        'methods' => 'GET',
-        'callback' => 'clientname_get_data',
+        'methods'             => 'GET',
+        'callback'            => 'clientname_get_data',
         'permission_callback' => '__return_true',
-        'args' => [
+        'args'                => [
             'id' => [
                 'validate_callback' => function($param) {
                     return is_numeric($param);
@@ -352,20 +376,38 @@ function clientname_register_api_routes() {
             ],
         ],
     ]);
+
+    // Authenticated endpoint - always use a proper capability check
+    register_rest_route('clientname/v1', '/admin/(?P<id>\d+)', [
+        'methods'             => 'POST',
+        'callback'            => 'clientname_update_data',
+        'permission_callback' => function() {
+            return current_user_can('edit_posts');
+        },
+    ]);
 }
 add_action('rest_api_init', 'clientname_register_api_routes');
 
 function clientname_get_data($request) {
-    $id = $request['id'];
-    // Return data
+    $id   = absint($request['id']);
+    $data = clientname_get_expensive_data($id);
+
+    if (!$data) {
+        return new WP_Error('not_found', 'Resource not found', ['status' => 404]);
+    }
+
     return rest_ensure_response(['data' => $data]);
 }
 ```
 
 ### Cron Jobs
 
+**VIP strongly recommends using [Cron Control](https://github.com/Automattic/Cron-Control)** (bundled in VIP MU plugins) instead of `wp_schedule_event`. Raw WP-Cron is unreliable at scale — it runs on page load and can cause duplicate execution under traffic spikes.
+
+With Cron Control you register events as a class implementing the `Automattic\WP\Cron_Control\Event` interface. For simpler needs, `wp_schedule_event` is acceptable but you must ensure the hook fires only once:
+
 ```php
-// Register cron event
+// Acceptable for simple cases - but prefer Cron Control on high-traffic sites
 function clientname_schedule_cron() {
     if (!wp_next_scheduled('clientname_daily_task')) {
         wp_schedule_event(time(), 'daily', 'clientname_daily_task');
