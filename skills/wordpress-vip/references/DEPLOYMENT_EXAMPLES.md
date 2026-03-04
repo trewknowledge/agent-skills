@@ -13,7 +13,7 @@ Developing a new custom post type feature with REST API endpoints.
 # 1. Create feature branch
 git checkout -b feature/custom-post-type
 
-# 2. Develop locally using VIP dev environment
+# 2. Develop locally using WordPress VIP dev environment
 vip dev-env start
 # Edit files, test locally at http://mysite.vipdev.lndo.site
 
@@ -34,7 +34,7 @@ git commit -m "feat: add Resource custom post type with REST API
 git push origin feature/custom-post-type
 
 # 6. Create Pull Request on GitHub
-# VIP automated scans run automatically
+# WordPress VIP automated scans run automatically
 
 # 7. Merge to develop branch after review
 # Deploys automatically to develop environment
@@ -43,7 +43,7 @@ git push origin feature/custom-post-type
 vip @mysite.develop wp post list --post_type=clientname_resource
 
 # 9. Merge to main for production deployment
-# Promote to production via VIP Dashboard
+# Promote to production via WordPress VIP Dashboard
 ```
 
 ## Example 2: Hotfix Deployment
@@ -87,7 +87,7 @@ git merge hotfix/critical-cache-bug
 git push origin main
 
 # 8. Monitor deployment
-# Check VIP Dashboard for deployment status
+# Check WordPress VIP Dashboard for deployment status
 # Monitor error logs
 vip @mysite.production logs php --tail
 
@@ -104,16 +104,16 @@ git push origin develop
 ## Example 3: Plugin Addition
 
 ### Scenario
-Adding a new third-party plugin to the VIP environment.
+Adding a new third-party plugin to the WordPress VIP environment.
 
 ### Workflow
 
-#### Option A: VIP Shared Plugin
+#### Option A: WordPress VIP Shared Plugin
 
 ```php
 // In client-mu-plugins/vip-config/vip-config.php
 
-// Check if plugin is in VIP shared plugins
+// Check if plugin is in WordPress VIP shared plugins
 // List: https://docs.wpvip.com/plugins/
 
 // Activate the plugin
@@ -140,11 +140,11 @@ git push origin develop
 mkdir -p plugins/custom-plugin
 # Copy plugin files
 
-# 2. Review plugin code for VIP compatibility
+# 2. Review plugin code for WordPress VIP compatibility
 ./scripts/vip-scan.sh plugins/custom-plugin
 
-# 3. Fix any VIP violations
-# Edit plugin files to use VIP-compatible functions
+# 3. Fix any WordPress VIP violations
+# Edit plugin files to use WordPress VIP-compatible functions
 
 # 4. Test locally
 vip dev-env start
@@ -157,12 +157,12 @@ git commit -m "feat: add custom analytics plugin
 - Tracks user interactions
 - Uses object cache for performance
 - All external requests cached
-- VIP compliance verified"
+- WordPress VIP compliance verified"
 
 # 6. Deploy to develop environment
 git push origin develop
 
-# 7. Request VIP review (first deployment)
+# 7. Request WordPress VIP review (first deployment)
 # Submit support ticket with plugin details
 # Wait for approval before production
 ```
@@ -302,7 +302,7 @@ Site experiencing slow page loads due to inefficient queries.
 ### Investigation
 
 ```bash
-# 1. Check New Relic in VIP Dashboard
+# 1. Check New Relic in WordPress VIP Dashboard
 # Identify slow transactions
 
 # 2. Review logs for slow queries
@@ -498,9 +498,9 @@ Use this checklist for all deployments:
 ```markdown
 ## Pre-Deployment
 - [ ] Code reviewed by team member
-- [ ] PHPCS passed with VIP ruleset
-- [ ] VIP scan shows no violations
-- [ ] Tested in local VIP dev environment
+- [ ] PHPCS passed with WordPress VIP ruleset
+- [ ] WordPress VIP scan shows no violations
+- [ ] Tested in local WordPress VIP dev environment
 - [ ] No debugging code (var_dump, console.log, etc.)
 - [ ] All external requests cached
 - [ ] Database queries optimized
