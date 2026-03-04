@@ -2,7 +2,7 @@
 
 This document provides detailed reference for WordPress VIP-specific functions and replacements for restricted functions.
 
-## VIP Helper Functions
+## WordPress VIP Helper Functions
 
 ### Image Handling
 
@@ -28,7 +28,7 @@ $attachment_id = wpcom_vip_download_image(
 
 #### `vip_safe_wp_remote_get()`
 
-Wrapper for `wp_remote_get()` with VIP-optimized timeouts and error handling.
+Wrapper for `wp_remote_get()` with WordPress VIP-optimized timeouts and error handling.
 
 ```php
 /**
@@ -70,7 +70,7 @@ $response = vip_safe_wp_remote_request(
 
 #### `get_temp_dir()`
 
-VIP-compatible temporary directory.
+WordPress VIP-compatible temporary directory.
 
 ```php
 $temp_file = get_temp_dir() . 'temp_file.txt';
@@ -111,7 +111,7 @@ $category = wpcom_vip_get_category_by_name('Category Name');
 
 | Restricted | Alternative | Notes |
 |------------|-------------|-------|
-| `file_put_contents()` | Object cache or VIP Files API | For persistent data |
+| `file_put_contents()` | Object cache or WordPress VIP Files API | For persistent data |
 | `fwrite()` | Object cache | Writes not allowed in production |
 | `touch()` | N/A | File system is read-only |
 | `mkdir()` | N/A | Cannot create directories |
@@ -154,14 +154,14 @@ $category = wpcom_vip_get_category_by_name('Category Name');
 | `eval()` | N/A | Security risk |
 | `extract()` | Manual variable assignment | Security risk |
 
-## VIP-Specific Constants
+## WordPress VIP-Specific Constants
 
 ### Environment Detection
 
 ```php
-// Check if running on VIP
+// Check if running on WordPress VIP
 if (defined('WPCOM_IS_VIP_ENV') && WPCOM_IS_VIP_ENV) {
-    // VIP-specific code
+    // WordPress VIP-specific code
 }
 
 // Check environment type
@@ -173,10 +173,10 @@ if (defined('VIP_GO_ENV') && 'production' === VIP_GO_ENV) {
 ### File Paths
 
 ```php
-// VIP client MU plugins directory
+// WordPress VIP client MU plugins directory
 WPCOM_VIP_CLIENT_MU_PLUGIN_DIR
 
-// VIP plugins directory  
+// WordPress VIP plugins directory  
 WP_CONTENT_DIR . '/plugins'
 
 // Uploads directory (use WordPress functions instead)
@@ -223,7 +223,7 @@ wp_cache_delete('key', 'group_name');
 - `options` - Site options
 - Custom groups for your data
 
-## WP-CLI on VIP
+## WP-CLI on WordPress VIP
 
 ### Cache Management
 
@@ -272,7 +272,7 @@ vip @mysite.env wp user update 1 --user_pass=newpassword
 ### Error Logging
 
 ```php
-// Log to error log (auto-streamed to VIP logs)
+// Log to error log (auto-streamed to WordPress VIP logs)
 error_log('Debug message: ' . print_r($data, true));
 
 // Conditional logging
@@ -281,7 +281,7 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
 }
 ```
 
-### VIP Development Mode
+### WordPress VIP Development Mode
 
 ```php
 // Check if in development

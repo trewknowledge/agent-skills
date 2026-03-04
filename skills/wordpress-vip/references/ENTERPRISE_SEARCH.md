@@ -755,7 +755,7 @@ function clientname_get_popular_searches($limit = 10, $days = 30) {
    vip @mysite.production wp elasticpress index --setup --nobulk
    ```
 
-3. **Monitor index health** in VIP Dashboard
+3. **Monitor index health** in WordPress VIP Dashboard
 
 ### Query Optimization
 
@@ -823,7 +823,7 @@ vip @mysite.production wp elasticpress index --setup
 2. Limit result size
 3. Cache results
 4. Optimize weighting configuration
-5. Review VIP Dashboard for performance metrics
+5. Review WordPress VIP Dashboard for performance metrics
 
 ### Index Corruption
 
