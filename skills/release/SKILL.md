@@ -1,6 +1,6 @@
 ---
 name: release
-description: Guide a project release checklist: verify and update the changelog (date-based), clean up debug code, update documentation, and brainstorm blog post topics. Use this skill whenever the user says "release", "ship", "cut a release", "prepare a release", or wants to go through a release checklist. Trigger even if they only mention one part of the process.
+description: "Guide a project release checklist: verify and update the changelog (date-based), clean up debug code, update documentation, and brainstorm blog post topics. Use this skill whenever the user says \"release\", \"ship\", \"cut a release\", \"prepare a release\", or wants to go through a release checklist. Trigger even if they only mention one part of the process."
 ---
 
 # Release Skill
