@@ -29,14 +29,24 @@ The goal is to make sure the changelog accurately reflects everything in this re
 ## YYYY-MM-DD
 
 ### Added
-- New feature description
+- **Short title**: one or two sentence description of what it does and why it matters.
 
 ### Fixed
-- Bug fix description
+- **Short title**: one sentence describing the bug and its user-visible impact.
 
 ### Changed
-- Behavior change description
+- **Short title**: one sentence describing the behavior change.
+
+### Plugin Updates
+- **Plugin Name**: vX.Y.Z → vA.B.C
 ```
+
+Writing entries — keep every bullet at the "what changed for a reader" altitude, not the "how it was implemented" altitude:
+- One to two sentences per bullet. If a description needs a third sentence, it's usually two entries or too much implementation detail — cut it down rather than let it grow.
+- Do not mention function/method/class names, filter or hook names, CSS classes, HTML attributes, or file paths. Those belong in code comments or the PR, not the changelog. Exception: hooks/filters that are genuinely new extensibility points for other developers can be named once, briefly — not enumerated.
+- Describe the effect ("editors can now add a French URL to links") not the mechanism ("added `data-fr-url` attribute and four new filters").
+- Third-party plugin version bumps never get their own Added/Fixed/Changed narrative bullet — list them only under **Plugin Updates** as `Plugin Name: vFrom → vTo`, with no elaboration. If a plugin was added or removed entirely (not just updated), that still goes under Added/Changed with a one-line reason.
+- Before finalizing, reread each bullet and ask: "would a non-engineer stakeholder skimming this understand what changed?" If not, simplify it.
 
 Add the new entry at the top of `CHANGELOG.md`, below any title/header line. Do not proceed until the changelog is confirmed.
 
