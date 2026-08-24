@@ -16,26 +16,27 @@ The goal is to make sure the changelog accurately reflects everything in this re
 1. Run `git log --oneline` to find the date of the last changelog entry. If no `CHANGELOG.md` exists yet, use all commits.
 2. Run `git log --oneline --since="<last entry date>"` to list commits since the last release.
 3. Run `git diff <last-release-commit>..HEAD` to review the actual code changes. Use the diff as the source of truth — commit messages can be vague or incomplete. Cross-reference both to build an accurate picture of what changed.
-4. Group changes by type:
+4. For each commit, check whether it references a PR. Squash-merged commits usually end with `(#1234)` in the message — that's the PR number. If a commit doesn't show one and `gh` is available, you can try `gh pr list --search "<sha>" --state merged --json number` to look it up, but don't spend a lot of effort chasing PRs that clearly aren't there (e.g. direct commits to the branch). It's fine for a changelog entry to have no PR reference.
+5. Group changes by type:
    - **Added** — new functionality that didn't exist before
    - **Fixed** — bugs fixed in **pre-existing** features only. If a bug was introduced and fixed within this same release cycle (e.g., caught during development of a new feature), do not list it under Fixed — fold it into the relevant Added entry or omit it entirely.
    - **Changed** — behavior changes, refactors, or updates to existing functionality
-5. Check whether `CHANGELOG.md` already has an entry dated today or covering these commits.
+6. Check whether `CHANGELOG.md` already has an entry dated today or covering these commits.
    - If yes and it looks accurate: confirm with the user and move on.
    - If missing or stale: draft a new entry and show it to the user for approval before writing it.
 
-**Changelog format** — date-based, no version numbers:
+**Changelog format** — date-based, no version numbers. When a line item has a known PR number, append it in parentheses as a markdown link to that PR (e.g. `(#1234)` linking to `<repo-url>/pull/1234`); get `<repo-url>` from `git remote get-url origin`. Omit the parenthetical entirely if there's no PR to reference — don't write `(#N/A)` or similar filler:
 ```
 ## YYYY-MM-DD
 
 ### Added
-- **Short title**: one or two sentence description of what it does and why it matters.
+- **Short title**: one or two sentence description of what it does and why it matters. ([#1234](https://github.com/org/repo/pull/1234))
 
 ### Fixed
 - **Short title**: one sentence describing the bug and its user-visible impact.
 
 ### Changed
-- **Short title**: one sentence describing the behavior change.
+- **Short title**: one sentence describing the behavior change. ([#1235](https://github.com/org/repo/pull/1235))
 
 ### Plugin Updates
 - **Plugin Name**: vX.Y.Z → vA.B.C
